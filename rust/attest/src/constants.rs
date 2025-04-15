@@ -10,7 +10,7 @@ use crate::util::SmallMap;
 use crate::{nitro, tpm2snp};
 
 pub const ENCLAVE_ID_CDSI_STAGING_AND_PROD: &[u8] =
-    &hex!("0f6fd79cdfdaa5b2e6337f534d3baf999318b0c462a7ac1f41297a3e4b424a57");
+    &hex!("c00d6f734e922f4b312ee3517680838e1dd951878b721cd0d09edb817da47389");
 pub const ENCLAVE_ID_SVR2_STAGING_OLD: &[u8] =
     &hex!("acb1973aa0bbbd14b3b4e06f145497d948fd4a98efc500fcce363b3b743ec482");
 pub const ENCLAVE_ID_SVR2_STAGING: &[u8] =
