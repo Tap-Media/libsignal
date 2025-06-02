@@ -8,10 +8,10 @@ Pod::Spec.new do |s|
   s.version          = '0.69.1'
   s.summary          = 'A Swift wrapper library for communicating with the Signal messaging service.'
 
-  s.homepage         = 'https://github.com/signalapp/libsignal'
+  s.homepage         = 'https://github.com/Tap-Media/libsignal.git'
   s.license          = 'AGPL-3.0-only'
   s.author           = 'Signal Messenger LLC'
-  s.source           = { :git => 'https://github.com/signalapp/libsignal.git', :tag => "v#{s.version}" }
+  s.source           = { :git => 'https://github.com/Tap-Media/libsignal.git', :tag => "v#{s.version}" }
 
   s.swift_version    = '5'
   s.platform         = :ios, '13.0'
