@@ -1,0 +1,69 @@
+name: Build iOS FFI (Rust -> Swift)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-ios:
+    name: Build iOS Targets
+    runs-on: macos-latest
+
+    env:
+      RUST_BACKTRACE: 1
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: rust-src
+
+    - name: Add iOS targets
+      run: |
+        rustup target add x86_64-apple-ios
+        rustup target add aarch64-apple-ios
+        rustup target add aarch64-apple-ios-sim
+
+    - name: Build for x86_64-apple-ios
+      run: CARGO_BUILD_TARGET=x86_64-apple-ios swift/build_ffi.sh --release
+
+    - name: Build for aarch64-apple-ios-sim
+      run: CARGO_BUILD_TARGET=aarch64-apple-ios-sim swift/build_ffi.sh --release
+
+    - name: Build for aarch64-apple-ios
+      run: CARGO_BUILD_TARGET=aarch64-apple-ios swift/build_ffi.sh --release
+
+    - name: Create archive of built libraries
+      run: |
+        mkdir -p build_artifacts
+        BRANCH_CLEAN=$(echo "${GITHUB_REF_NAME}" | sed 's|/|-|g')
+        ARCHIVE_NAME="libsignal-client-ios-build-${BRANCH_CLEAN}.tar.gz"
+        tar -czf build_artifacts/$ARCHIVE_NAME \
+          target/aarch64-apple-ios/release/libsignal_ffi.a \
+          target/x86_64-apple-ios/release/libsignal_ffi.a \
+          target/aarch64-apple-ios-sim/release/libsignal_ffi.a
+        echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> $GITHUB_ENV
+
+    - name: Create SHA256 checksum
+      run: |
+        CHECKSUM_FILE="${ARCHIVE_NAME}.sha256"
+        shasum -a 256 build_artifacts/$ARCHIVE_NAME > build_artifacts/$CHECKSUM_FILE
+        echo "CHECKSUM_FILE=$CHECKSUM_FILE" >> $GITHUB_ENV
+
+    - name: Print SHA256 checksum
+      run: cat build_artifacts/${CHECKSUM_FILE}
+
+    - name: Upload archive and checksum as artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-${{ github.ref_name }}
+        path: |
+          build_artifacts/${{ env.ARCHIVE_NAME }}
+          build_artifacts/${{ env.CHECKSUM_FILE }}
