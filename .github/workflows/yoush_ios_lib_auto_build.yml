@@ -24,7 +24,13 @@ jobs:
         toolchain: stable
         override: true
         components: rust-src
-
+    
+    - name: Install protoc (Protobuf)
+      run: |
+        brew install protobuf
+        echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
+        protoc --version
+    
     - name: Add iOS targets
       run: |
         rustup target add x86_64-apple-ios
