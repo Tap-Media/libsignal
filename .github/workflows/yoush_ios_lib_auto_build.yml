@@ -47,14 +47,14 @@ jobs:
     - name: Create .tar.gz archive of built libraries
       run: |
         mkdir -p build_artifacts
-        SAFE_BRANCH=$(echo "${GITHUB_HEAD_REF}" | sed 's|/|-|g')
-        ARCHIVE_NAME="libsignal-client-ios-build-${SAFE_BRANCH}.tar.gz"
+        VERSION_TAG=$(echo "${GITHUB_HEAD_REF}" | sed 's|.*/||' | sed 's|.*-||')
+        ARCHIVE_NAME="libsignal-client-ios-build-${VERSION_TAG}.tar.gz"
         tar -czf build_artifacts/$ARCHIVE_NAME \
           target/aarch64-apple-ios/release/libsignal_ffi.a \
           target/x86_64-apple-ios/release/libsignal_ffi.a \
           target/aarch64-apple-ios-sim/release/libsignal_ffi.a
         echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> $GITHUB_ENV
-        echo "SAFE_BRANCH=$SAFE_BRANCH" >> $GITHUB_ENV
+        echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
 
     - name: Print SHA256 checksum
       run: |
