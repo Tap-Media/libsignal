@@ -46,11 +46,15 @@ jobs:
     - name: Build for aarch64-apple-ios
       run: CARGO_BUILD_TARGET=aarch64-apple-ios swift/build_ffi.sh --release
 
+    - name: Sanitize branch name
+      run: |
+        SAFE_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's|/|-|g')
+        echo "SAFE_BRANCH=$SAFE_BRANCH" >> $GITHUB_ENV
+
     - name: Create archive of built libraries
       run: |
         mkdir -p build_artifacts
-        BRANCH_CLEAN=$(echo "${GITHUB_REF_NAME}" | sed 's|/|-|g')
-        ARCHIVE_NAME="libsignal-client-ios-build-${BRANCH_CLEAN}.tar.gz"
+        ARCHIVE_NAME="libsignal-client-ios-build-${SAFE_BRANCH}.tar.gz"
         tar -czf build_artifacts/$ARCHIVE_NAME \
           target/aarch64-apple-ios/release/libsignal_ffi.a \
           target/x86_64-apple-ios/release/libsignal_ffi.a \
@@ -69,7 +73,7 @@ jobs:
     - name: Upload archive and checksum as artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ios-build-${{ github.ref_name.replace('/', '-') }}
+        name: ios-build-${{ env.SAFE_BRANCH }}
         path: |
           build_artifacts/${{ env.ARCHIVE_NAME }}
           build_artifacts/${{ env.CHECKSUM_FILE }}
