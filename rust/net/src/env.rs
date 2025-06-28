@@ -38,15 +38,15 @@ pub(crate) const CONNECTED_ELSEWHERE_CLOSE_CODE: u16 = 4409;
 
 const DOMAIN_CONFIG_CHAT: DomainConfig = DomainConfig {
     ip_v4: &[
-        ip_addr!(v4, "76.223.92.165"),
-        ip_addr!(v4, "13.248.212.111"),
+        ip_addr!(v4, "54.254.244..199"),
+        ip_addr!(v4, "3.1.19.182"),
     ],
     ip_v6: &[
         ip_addr!(v6, "2600:9000:a507:ab6d:4ce3:2f58:25d7:9cbf"),
         ip_addr!(v6, "2600:9000:a61f:527c:d5eb:a431:5239:3232"),
     ],
     connect: ConnectionConfig {
-        hostname: "signal-server-dev.tapofthink.com",
+        hostname: "chat.tapofthink.com",
         port: DEFAULT_HTTPS_PORT,
         cert: SIGNAL_ROOT_CERTIFICATES,
         confirmation_header_name: Some(TIMESTAMP_HEADER_NAME),
