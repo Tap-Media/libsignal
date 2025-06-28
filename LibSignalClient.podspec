@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/Tap-Media/libsignal.git'
   s.license          = 'AGPL-3.0-only'
   s.author           = 'Signal Messenger LLC'
-  s.source           = { :git => 'https://github.com/Tap-Media/libsignal.git', :tag => "youshv#{s.version}" }
+  s.source           = { :git => 'https://github.com/Tap-Media/libsignal.git', :branch => "yoush-#{s.version}" }
 
   s.swift_version    = '5'
   s.platform         = :ios, '13.0'
