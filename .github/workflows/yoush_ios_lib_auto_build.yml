@@ -44,12 +44,12 @@ jobs:
     - name: Build for aarch64-apple-ios
       run: CARGO_BUILD_TARGET=aarch64-apple-ios swift/build_ffi.sh --release
 
-    - name: Create archive of built libraries
+    - name: Create .tar.gz archive of built libraries
       run: |
         mkdir -p build_artifacts
         SAFE_BRANCH=$(echo "${GITHUB_HEAD_REF}" | sed 's|/|-|g')
-        ARCHIVE_NAME="libsignal-client-ios-build-${SAFE_BRANCH}.tar"
-        tar -cf build_artifacts/$ARCHIVE_NAME \
+        ARCHIVE_NAME="libsignal-client-ios-build-${SAFE_BRANCH}.tar.gz"
+        tar -czf build_artifacts/$ARCHIVE_NAME \
           target/aarch64-apple-ios/release/libsignal_ffi.a \
           target/x86_64-apple-ios/release/libsignal_ffi.a \
           target/aarch64-apple-ios-sim/release/libsignal_ffi.a
@@ -61,7 +61,7 @@ jobs:
         echo "SHA256 checksum:"
         shasum -a 256 build_artifacts/${ARCHIVE_NAME}
 
-    - name: Upload .tar file as artifact
+    - name: Upload .tar.gz file as artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARCHIVE_NAME }}
