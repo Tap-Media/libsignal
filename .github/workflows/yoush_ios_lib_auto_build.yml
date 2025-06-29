@@ -16,24 +16,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        components: rust-src
-    
-    - name: Install protoc (Protobuf)
-      run: |
-        brew install protobuf
-        echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
-        protoc --version
-    
-    - name: Add iOS targets
-      run: |
-        rustup target add x86_64-apple-ios
-        rustup target add aarch64-apple-ios
-        rustup target add aarch64-apple-ios-sim
+    - run: rustup toolchain install $(cat rust-toolchain) --profile minimal --target x86_64-apple-ios,aarch64-apple-ios,aarch64-apple-ios-sim --component rust-src
+
+    - run: brew install protobuf
 
     - name: Build for x86_64-apple-ios
       run: CARGO_BUILD_TARGET=x86_64-apple-ios swift/build_ffi.sh --release
