@@ -13,12 +13,19 @@ jobs:
       RUST_BACKTRACE: 1
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout repository with submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - run: rustup toolchain install $(cat rust-toolchain) --profile minimal --target x86_64-apple-ios,aarch64-apple-ios,aarch64-apple-ios-sim --component rust-src
 
-    - run: brew install protobuf
+    - name: Install protoc (Protobuf)
+      run: |
+        brew install protobuf
+        echo "PROTOC=$(which protoc)" >> $GITHUB_ENV
+        protoc --version
+    
 
     - name: Build for x86_64-apple-ios
       run: CARGO_BUILD_TARGET=x86_64-apple-ios swift/build_ffi.sh --release
