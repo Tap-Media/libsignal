@@ -22,19 +22,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Checking run eligibility
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-        script: |
-          const dryRun = ${{ inputs.dry_run }};
-          const refType = '${{ github.ref_type }}';
-          const refName = '${{ github.ref_name }}';
-          console.log(dryRun 
-            ? `Running in 'dry run' mode on '${refName}' ${refType}` 
-            : `Running on '${refName}' ${refType}`);
-          if (refType !== 'tag' && !dryRun) {
-            core.setFailed("the action should either be launched on a tag or with a 'dry run' switch");
-          }
 
     - id: archive-name
       run: echo name=libsignal-client-ios-build-v$(sed -En "s/${VERSION_REGEX}/\1/p" LibSignalClient.podspec).tar.gz >> $GITHUB_OUTPUT
