@@ -60,7 +60,7 @@ const DOMAIN_CONFIG_CHAT: DomainConfig = DomainConfig {
 const DOMAIN_CONFIG_CHAT_STAGING: DomainConfig = DomainConfig {
     ip_v4: &[
         ip_addr!(v4, "54.254.244.199"),
-        ip_addr!(v4, "3.1.19.182"),
+        ip_addr!(v4, "13.1.19.182"),
     ],
     ip_v6: &[
         ip_addr!(v6, "2600:9000:a507:ab6d:7b25:2580:8bd6:3b93"),
