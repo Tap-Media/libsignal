@@ -67,6 +67,6 @@ jobs:
     - name: Upload to S3 via AWS CLI
       run: |
         echo "Uploading ${{ steps.archive-name.outputs.name }} to S3..."
-        aws s3 cp "${{ steps.archive-name.outputs.name }}" s3://lib-yoush-artifacts --acl public-read
+        aws s3 cp "${{ steps.archive-name.outputs.name }}" s3://lib-yoush-artifacts
 
 
