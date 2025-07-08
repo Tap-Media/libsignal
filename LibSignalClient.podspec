@@ -8,10 +8,10 @@ Pod::Spec.new do |s|
   s.version          = '0.70.0'
   s.summary          = 'A Swift wrapper library for communicating with the Signal messaging service.'
 
-  s.homepage         = 'https://github.com/signalapp/libsignal'
+  s.homepage         = 'https://github.com/Tap-Media/libsignal.git'
   s.license          = 'AGPL-3.0-only'
   s.author           = 'Signal Messenger LLC'
-  s.source           = { :git => 'https://github.com/signalapp/libsignal.git', :tag => "v#{s.version}" }
+  s.source           = { :git => 'https://github.com/Tap-Media/libsignal.git', :branch => "yoush-#{s.version}" }
 
   s.swift_version    = '5'
   s.platform         = :ios, '13.0'
@@ -71,7 +71,7 @@ Pod::Spec.new do |s|
           # Local development
           exit 0
         fi
-        "${PODS_TARGET_SRCROOT}"/bin/fetch_archive.py -u "https://build-artifacts.signal.org/libraries/${LIBSIGNAL_FFI_PREBUILD_ARCHIVE}" -c "${LIBSIGNAL_FFI_PREBUILD_CHECKSUM}" -o "${USER_LIBRARY_DIR}/Caches/org.signal.libsignal"
+        "${PODS_TARGET_SRCROOT}"/bin/fetch_archive.py -u "https://lib-yoush-artifacts.s3.ap-southeast-1.amazonaws.com/${LIBSIGNAL_FFI_PREBUILD_ARCHIVE}" -c "${LIBSIGNAL_FFI_PREBUILD_CHECKSUM}" -o "${USER_LIBRARY_DIR}/Caches/org.signal.libsignal"
       ),
     },
     { name: 'Extract libsignal-ffi prebuild',

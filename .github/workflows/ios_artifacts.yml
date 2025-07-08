@@ -1,14 +1,5 @@
 name: Build iOS Artifacts
-
-on:
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: "Just build, don't publish"
-        default: false
-        required: false
-        type: boolean
-
+on: push
 env:
   CARGO_TERM_COLOR: always
 
@@ -31,19 +22,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Checking run eligibility
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-        script: |
-          const dryRun = ${{ inputs.dry_run }};
-          const refType = '${{ github.ref_type }}';
-          const refName = '${{ github.ref_name }}';
-          console.log(dryRun 
-            ? `Running in 'dry run' mode on '${refName}' ${refType}` 
-            : `Running on '${refName}' ${refType}`);
-          if (refType !== 'tag' && !dryRun) {
-            core.setFailed("the action should either be launched on a tag or with a 'dry run' switch");
-          }
 
     - id: archive-name
       run: echo name=libsignal-client-ios-build-v$(sed -En "s/${VERSION_REGEX}/\1/p" LibSignalClient.podspec).tar.gz >> $GITHUB_OUTPUT
@@ -79,24 +57,30 @@ jobs:
       with:
         path: ${{ steps.archive-name.outputs.name }}
         name: libsignal-client-ios
-
-    - uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c # v2.1.2
-      if: ${{ !inputs.dry_run }}
+  
+    - name: Configure AWS credentials via OIDC
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        workload_identity_provider: 'projects/741367068918/locations/global/workloadIdentityPools/github/providers/github-actions'
-        service_account: 'github-actions@signal-build-artifacts.iam.gserviceaccount.com'
+        role-to-assume: arn:aws:iam::767828741221:role/GitHubOIDCRole
+        aws-region: ap-southeast-1
+  
+    - name: Check and upload artifact to S3
+      run: |
+        FILE_NAME="${{ steps.archive-name.outputs.name }}"
+        BUCKET="lib-yoush-artifacts"
+        DEST="s3://${BUCKET}/${FILE_NAME}"
+    
+        if aws s3 ls "$DEST" > /dev/null 2>&1; then
+          echo "⚠️ File is exist, Remove the old file"
+          aws s3 rm "$DEST"
+        else
+          echo "✅ File not found, upload the current file"
+        fi
+        aws s3 cp "$FILE_NAME" "$DEST"
 
-    - uses: google-github-actions/upload-cloud-storage@22121cd842b0d185e042e28d969925b538c33d77 # v2.1.0
-      if: ${{ !inputs.dry_run }}
-      with:
-        path: ${{ steps.archive-name.outputs.name }}
-        destination: build-artifacts.signal.org/libraries
+    - name: Upload to S3 via AWS CLI
+      run: |
+        echo "Uploading ${{ steps.archive-name.outputs.name }} to S3..."
+        aws s3 cp "${{ steps.archive-name.outputs.name }}" s3://lib-yoush-artifacts
 
-    # This step is expected to fail if not run on a tag.
-    - name: Upload checksum to release
-      uses: ncipollo/release-action@66b1844f0b7ef940787c9d128846d5ac09b3881f # v1.14
-      if: ${{ !inputs.dry_run }}
-      with:
-        allowUpdates: true
-        artifactErrorsFailBuild: true
-        artifacts: ${{ steps.archive-name.outputs.name }}.sha256
+

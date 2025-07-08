@@ -38,15 +38,15 @@ pub(crate) const CONNECTED_ELSEWHERE_CLOSE_CODE: u16 = 4409;
 
 const DOMAIN_CONFIG_CHAT: DomainConfig = DomainConfig {
     ip_v4: &[
-        ip_addr!(v4, "76.223.92.165"),
-        ip_addr!(v4, "13.248.212.111"),
+        ip_addr!(v4, "54.254.244.199"),
+        ip_addr!(v4, "3.1.19.182"),
     ],
     ip_v6: &[
         ip_addr!(v6, "2600:9000:a507:ab6d:4ce3:2f58:25d7:9cbf"),
         ip_addr!(v6, "2600:9000:a61f:527c:d5eb:a431:5239:3232"),
     ],
     connect: ConnectionConfig {
-        hostname: "chat.signal.org",
+        hostname: "chat.tapofthink.com",
         port: DEFAULT_HTTPS_PORT,
         cert: SIGNAL_ROOT_CERTIFICATES,
         confirmation_header_name: Some(TIMESTAMP_HEADER_NAME),
@@ -59,15 +59,15 @@ const DOMAIN_CONFIG_CHAT: DomainConfig = DomainConfig {
 
 const DOMAIN_CONFIG_CHAT_STAGING: DomainConfig = DomainConfig {
     ip_v4: &[
-        ip_addr!(v4, "76.223.72.142"),
-        ip_addr!(v4, "13.248.206.115"),
+        ip_addr!(v4, "54.254.244.199"),
+        ip_addr!(v4, "3.1.19.182"),
     ],
     ip_v6: &[
         ip_addr!(v6, "2600:9000:a507:ab6d:7b25:2580:8bd6:3b93"),
         ip_addr!(v6, "2600:9000:a61f:527c:2215:cd9:bac6:a2f8"),
     ],
     connect: ConnectionConfig {
-        hostname: "chat.staging.signal.org",
+        hostname: "signal-server-dev.tapofthink.com",
         port: DEFAULT_HTTPS_PORT,
         cert: SIGNAL_ROOT_CERTIFICATES,
         confirmation_header_name: Some(TIMESTAMP_HEADER_NAME),
@@ -80,7 +80,7 @@ const DOMAIN_CONFIG_CHAT_STAGING: DomainConfig = DomainConfig {
 
 const DOMAIN_CONFIG_CDSI: DomainConfig = DomainConfig {
     connect: ConnectionConfig {
-        hostname: "cdsi.signal.org",
+        hostname: "cdsi.tapofthink.com",
         port: DEFAULT_HTTPS_PORT,
         cert: SIGNAL_ROOT_CERTIFICATES,
         confirmation_header_name: None,
@@ -89,13 +89,13 @@ const DOMAIN_CONFIG_CDSI: DomainConfig = DomainConfig {
             configs: [PROXY_CONFIG_F_PROD, PROXY_CONFIG_G],
         }),
     },
-    ip_v4: &[ip_addr!(v4, "40.122.45.194")],
+    ip_v4: &[ip_addr!(v4, "134.33.139.154")],
     ip_v6: &[ip_addr!(v6, "2603:1030:7::1")],
 };
 
 const DOMAIN_CONFIG_CDSI_STAGING: DomainConfig = DomainConfig {
     connect: ConnectionConfig {
-        hostname: "cdsi.staging.signal.org",
+        hostname: "cdsi-dev.tapofthink.com",
         port: DEFAULT_HTTPS_PORT,
         cert: SIGNAL_ROOT_CERTIFICATES,
         confirmation_header_name: None,
