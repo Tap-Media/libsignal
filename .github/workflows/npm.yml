@@ -12,6 +12,9 @@ on:
         description: 'NPM tag'
         required: true
         default: 'latest'
+  push:
+    branches:
+      - test_workflow
 
 env:
   CARGO_TERM_COLOR: always
